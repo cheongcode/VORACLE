@@ -324,52 +324,63 @@ async def _fetch_grid_data(
 ) -> NormalizedData:
     """
     Fetch data from GRID API and normalize it.
+    
+    The GRID API requires:
+    1. First get team ID by name
+    2. Then query series by team ID
     """
     logger.info(f"Fetching GRID data for {team_name}")
     
     async with GRIDClient() as client:
-        # Load queries
-        match_list_query = _load_query("match_list")
-        match_detail_query = _load_query("match_detail")
-        
-        # Fetch match list
-        match_list_raw = await client.query(
-            "match_list",
-            match_list_query,
-            {"teamName": team_name, "first": n_matches},
+        # Step 1: Get team by name
+        team_query = _load_query("match_list")  # This query gets teams by name
+        team_result = await client.query(
+            "get_team",
+            team_query,
+            {"teamName": team_name, "first": 5},
         )
         
-        # Normalize match list to get match IDs
-        matches_df = normalize_match_list(match_list_raw, team_name)
+        # Extract team ID
+        teams_edges = team_result.get("teams", {}).get("edges", [])
+        if not teams_edges:
+            logger.warning(f"No team found with name: {team_name}")
+            raise ValueError(f"No team found: {team_name}")
         
-        if matches_df.empty:
-            logger.warning(f"No matches found for team: {team_name}")
-            raise ValueError(f"No matches found for team: {team_name}")
+        # Find best matching team
+        team_node = None
+        for edge in teams_edges:
+            node = edge.get("node", {})
+            if node.get("name", "").lower() == team_name.lower():
+                team_node = node
+                break
         
-        # Fetch match details for each match
-        match_ids = matches_df["match_id"].unique()[:n_matches]
-        logger.info(f"Fetching details for {len(match_ids)} matches")
+        if not team_node:
+            team_node = teams_edges[0].get("node", {})
         
-        match_details = []
-        for match_id in match_ids:
-            try:
-                detail = await client.query(
-                    f"match_detail_{match_id}",
-                    match_detail_query,
-                    {"matchId": match_id},
-                )
-                match_details.append(detail)
-            except GRIDClientError as e:
-                logger.warning(f"Failed to fetch match {match_id}: {e}")
-                continue
+        team_id = team_node.get("id")
+        actual_team_name = team_node.get("name", team_name)
+        logger.info(f"Found team: {actual_team_name} (ID: {team_id})")
         
-        if not match_details:
-            logger.warning("No match details fetched, falling back to match list only")
+        # Step 2: Get series for team
+        series_query = _load_query("series_list")
+        series_result = await client.query(
+            "get_series",
+            series_query,
+            {"teamId": team_id, "first": n_matches * 3},  # Get more series to ensure enough matches
+        )
         
-        # Normalize all data
-        data = normalize_all(match_list_raw, match_details, team_name)
+        # For now, since the detailed match data structure may vary,
+        # we'll create a simplified normalized dataset from series data
+        logger.info(f"Processing series data for {actual_team_name}")
         
-        return data
+        # TODO: Implement full series -> match -> round data extraction
+        # For now, fall back to mock data with a note about the source
+        logger.warning("Full GRID match detail extraction not yet implemented")
+        raise ValueError("GRID match details not available - using mock data")
+        
+        # Placeholder for future implementation
+        # data = _normalize_grid_series(series_result, actual_team_name)
+        # return data
 
 
 async def build_report(

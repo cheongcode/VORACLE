@@ -1,0 +1,33 @@
+# Query to fetch recent series for a team by team ID
+
+query GetTeamSeries($teamId: ID!, $first: Int!) {
+  allSeries(
+    filter: { teamId: $teamId }
+    first: $first
+    orderBy: START_TIME_SCHEDULED
+    orderDirection: DESC
+  ) {
+    edges {
+      node {
+        id
+        startTimeScheduled
+        format {
+          name
+        }
+        type
+        tournament {
+          id
+          name
+        }
+        teams {
+          edges {
+            node {
+              id
+              name
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,43 +1,17 @@
-# Query to fetch recent matches for a VALORANT team
-# Used by VORACLE to get match IDs for detailed analysis
+# Query to fetch recent series for a VALORANT team
+# First get team by name, then use team ID to get series
 
-query GetTeamMatches($teamName: String!, $first: Int!) {
-  teams(filter: { name: { contains: $teamName } }, first: 1) {
+query GetTeamByName($teamName: String!, $first: Int!) {
+  teams(filter: { name: { contains: $teamName } }, first: $first) {
     edges {
       node {
         id
         name
-        seriesParticipations(first: $first, orderBy: { field: START_TIME, direction: DESC }) {
-          edges {
-            node {
-              id
-              startTimeScheduled
-              series {
-                id
-                startTimeScheduled
-                tournament {
-                  name
-                }
-                matches {
-                  edges {
-                    node {
-                      id
-                      map {
-                        name
-                      }
-                      teams {
-                        baseInfo {
-                          name
-                        }
-                        score
-                        won
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
+        nameShortened
+        logoUrl
+        title {
+          id
+          name
         }
       }
     }
