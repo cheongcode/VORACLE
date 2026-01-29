@@ -1,0 +1,62 @@
+# Query to fetch detailed match data for VALORANT
+# Includes rounds, player stats, economy, and events
+
+query GetMatchDetails($matchId: ID!) {
+  match(id: $matchId) {
+    id
+    map {
+      name
+    }
+    durationMillis
+    teams {
+      baseInfo {
+        id
+        name
+      }
+      score
+      won
+      players {
+        baseInfo {
+          id
+          nickname
+        }
+        agent {
+          name
+        }
+        stats {
+          kills
+          deaths
+          assists
+          damageDealt
+        }
+      }
+    }
+    rounds {
+      number
+      winningTeam {
+        baseInfo {
+          name
+        }
+      }
+      winCondition
+      ceremonyType
+      spike {
+        planted
+        defused
+      }
+      playerStats {
+        player {
+          baseInfo {
+            nickname
+          }
+        }
+        kills
+        deaths
+        damageDealt
+        loadoutValue
+        wasFirstBlood
+        wasFirstDeath
+      }
+    }
+  }
+}

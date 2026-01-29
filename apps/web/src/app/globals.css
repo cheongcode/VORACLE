@@ -1,0 +1,151 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Font Import */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* Base Styles */
+:root {
+  --valorant-dark: #0F1923;
+  --valorant-card: #1A2634;
+  --valorant-border: #2A3A4D;
+  --valorant-red: #FF4655;
+  --c9-cyan: #00AEEF;
+  --text-primary: #FFFFFF;
+  --text-secondary: #8B9EB7;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  background-color: var(--valorant-dark);
+  color: var(--text-primary);
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--valorant-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--valorant-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--c9-cyan);
+}
+
+/* Utility Classes */
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-c9-cyan to-c9-cyanLight;
+  }
+
+  .glass-card {
+    @apply bg-valorant-card/80 backdrop-blur-sm border border-valorant-border rounded-xl;
+  }
+
+  .glow-border {
+    @apply border-c9-cyan shadow-glow-sm;
+  }
+
+  .stat-value {
+    @apply font-display font-bold tracking-tight;
+  }
+
+  .section-title {
+    @apply text-sm font-semibold uppercase tracking-widest text-text-secondary;
+  }
+}
+
+/* Animation Classes */
+@layer utilities {
+  .animate-in {
+    animation: slideUp 0.5s ease-out forwards;
+  }
+
+  .animate-in-delay-1 {
+    animation: slideUp 0.5s ease-out 0.1s forwards;
+    opacity: 0;
+  }
+
+  .animate-in-delay-2 {
+    animation: slideUp 0.5s ease-out 0.2s forwards;
+    opacity: 0;
+  }
+
+  .animate-in-delay-3 {
+    animation: slideUp 0.5s ease-out 0.3s forwards;
+    opacity: 0;
+  }
+}
+
+/* Recharts Custom Styles */
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: var(--valorant-border);
+  stroke-opacity: 0.5;
+}
+
+.recharts-tooltip-wrapper {
+  outline: none !important;
+}
+
+/* Progress Bar Animation */
+@keyframes progressFill {
+  from {
+    width: 0%;
+  }
+  to {
+    width: var(--progress-width);
+  }
+}
+
+.progress-bar-animated {
+  animation: progressFill 1s ease-out forwards;
+}
+
+/* Glow Pulse Effect */
+@keyframes glowPulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(0, 174, 239, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(0, 174, 239, 0.6);
+  }
+}
+
+.glow-pulse {
+  animation: glowPulse 2s ease-in-out infinite;
+}
+
+/* Number Counter Animation */
+@keyframes countUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.count-up {
+  animation: countUp 0.5s ease-out forwards;
+}
