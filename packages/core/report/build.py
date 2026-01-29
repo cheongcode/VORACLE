@@ -8,8 +8,10 @@ from __future__ import annotations
 
 import logging
 from datetime import datetime
+from pathlib import Path
 from typing import Any, Optional
 
+from ..grid.client import GRIDClient, GRIDClientError
 from ..grid.mock_data import get_mock_matches
 from ..insights.generator import (
     generate_insights,
@@ -21,7 +23,7 @@ from ..insights.generator import (
 )
 from ..insights.rules import InsightResult
 from ..metrics.valorant import AllMetrics, compute_all_metrics, compute_trend_shift
-from ..normalize.valorant import NormalizedData, normalize_mock_data, normalize_all
+from ..normalize.valorant import NormalizedData, normalize_mock_data, normalize_all, normalize_match_list, normalize_match_detail
 from .models import (
     AgentStats,
     DataFrameInfo,
@@ -308,6 +310,68 @@ def _build_evidence_tables(data: NormalizedData, max_rows: int = 10) -> dict[str
     return tables
 
 
+def _load_query(name: str) -> str:
+    """Load a GraphQL query from file."""
+    query_path = Path(__file__).parent.parent / "grid" / "queries" / "valorant" / f"{name}.graphql"
+    if query_path.exists():
+        return query_path.read_text()
+    raise FileNotFoundError(f"Query file not found: {query_path}")
+
+
+async def _fetch_grid_data(
+    team_name: str,
+    n_matches: int,
+) -> NormalizedData:
+    """
+    Fetch data from GRID API and normalize it.
+    """
+    logger.info(f"Fetching GRID data for {team_name}")
+    
+    async with GRIDClient() as client:
+        # Load queries
+        match_list_query = _load_query("match_list")
+        match_detail_query = _load_query("match_detail")
+        
+        # Fetch match list
+        match_list_raw = await client.query(
+            "match_list",
+            match_list_query,
+            {"teamName": team_name, "first": n_matches},
+        )
+        
+        # Normalize match list to get match IDs
+        matches_df = normalize_match_list(match_list_raw, team_name)
+        
+        if matches_df.empty:
+            logger.warning(f"No matches found for team: {team_name}")
+            raise ValueError(f"No matches found for team: {team_name}")
+        
+        # Fetch match details for each match
+        match_ids = matches_df["match_id"].unique()[:n_matches]
+        logger.info(f"Fetching details for {len(match_ids)} matches")
+        
+        match_details = []
+        for match_id in match_ids:
+            try:
+                detail = await client.query(
+                    f"match_detail_{match_id}",
+                    match_detail_query,
+                    {"matchId": match_id},
+                )
+                match_details.append(detail)
+            except GRIDClientError as e:
+                logger.warning(f"Failed to fetch match {match_id}: {e}")
+                continue
+        
+        if not match_details:
+            logger.warning("No match details fetched, falling back to match list only")
+        
+        # Normalize all data
+        data = normalize_all(match_list_raw, match_details, team_name)
+        
+        return data
+
+
 async def build_report(
     team_name: str,
     n_matches: int = 10,
@@ -325,11 +389,13 @@ async def build_report(
         raw_matches = get_mock_matches(team_name, n_matches)
         data = normalize_mock_data(raw_matches, team_name)
     else:
-        # For real data, we would use the GRID client
-        # For now, fall back to mock data
-        logger.warning("Real GRID data not yet implemented, using mock data")
-        raw_matches = get_mock_matches(team_name, n_matches)
-        data = normalize_mock_data(raw_matches, team_name)
+        # Fetch from GRID API
+        try:
+            data = await _fetch_grid_data(team_name, n_matches)
+        except (GRIDClientError, ValueError) as e:
+            logger.warning(f"GRID API fetch failed: {e}. Falling back to mock data.")
+            raw_matches = get_mock_matches(team_name, n_matches)
+            data = normalize_mock_data(raw_matches, team_name)
     
     # Step 2: Compute metrics
     metrics = compute_all_metrics(data, team_name)
