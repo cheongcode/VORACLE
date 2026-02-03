@@ -118,7 +118,7 @@ export default function ReportPage() {
             </h2>
             <p className="mt-2 text-text-secondary">{error}</p>
             <button
-              onClick={loadReport}
+              onClick={() => loadReport()}
               className="mt-6 inline-flex items-center gap-2 rounded-lg bg-c9-cyan px-6 py-2 font-semibold text-valorant-dark hover:bg-c9-cyanLight"
             >
               <RefreshCw className="h-4 w-4" />
