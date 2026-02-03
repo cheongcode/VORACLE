@@ -358,7 +358,7 @@ export default function ReportPage() {
               avg_assists: p.avg_assists,
               kd_ratio: p.kd_ratio,
               first_blood_rate: p.first_blood_rate,
-              first_blood_pct: 0,
+              first_death_rate: p.first_death_rate || 0,
             }))} />
 
             {/* Section 8: Key Insights */}
