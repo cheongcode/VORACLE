@@ -1,24 +1,57 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Search, Loader2, Zap, ArrowRight } from 'lucide-react';
+import { Search, Loader2, Zap, ArrowRight, Globe, Trophy } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { fetchPopularTeams, type PopularTeam } from '@/lib/api';
 
 interface TeamSearchProps {
   availableTeams?: string[];
 }
 
-export function TeamSearch({ availableTeams = ['Cloud9', 'Sentinels', 'LOUD'] }: TeamSearchProps) {
+const REGIONS = [
+  { code: 'na', name: 'Americas', flag: '🇺🇸' },
+  { code: 'eu', name: 'EMEA', flag: '🇪🇺' },
+  { code: 'ap', name: 'Pacific', flag: '🌏' },
+  { code: 'la', name: 'LATAM', flag: '🌎' },
+];
+
+export function TeamSearch({ availableTeams = [] }: TeamSearchProps) {
   const router = useRouter();
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
+  const [popularTeams, setPopularTeams] = useState<PopularTeam[]>([]);
+  const [selectedRegion, setSelectedRegion] = useState<string>('all');
+  const [isLoadingTeams, setIsLoadingTeams] = useState(true);
+  const [dataSource, setDataSource] = useState<string>('');
 
-  const filteredTeams = availableTeams.filter((team) =>
-    team.toLowerCase().includes(query.toLowerCase())
-  );
+  useEffect(() => {
+    loadPopularTeams();
+  }, []);
+
+  const loadPopularTeams = async () => {
+    setIsLoadingTeams(true);
+    try {
+      const response = await fetchPopularTeams('na,eu,ap,la', 5);
+      setPopularTeams(response.teams);
+      setDataSource(response.source);
+    } catch (error) {
+      console.error('Failed to load teams:', error);
+    } finally {
+      setIsLoadingTeams(false);
+    }
+  };
+
+  const displayedTeams = selectedRegion === 'all' 
+    ? popularTeams 
+    : popularTeams.filter(t => t.region.toLowerCase() === selectedRegion);
+
+  const filteredTeams = query 
+    ? popularTeams.filter(t => t.name.toLowerCase().includes(query.toLowerCase()))
+    : [];
 
   const handleSearch = (teamName: string) => {
     setIsLoading(true);
@@ -33,7 +66,7 @@ export function TeamSearch({ availableTeams = ['Cloud9', 'Sentinels', 'LOUD'] }:
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
+    <div className="w-full max-w-4xl mx-auto">
       {/* Search Form */}
       <form onSubmit={handleSubmit}>
         <motion.div
@@ -101,45 +134,113 @@ export function TeamSearch({ availableTeams = ['Cloud9', 'Sentinels', 'LOUD'] }:
         >
           {filteredTeams.map((team) => (
             <button
-              key={team}
-              onClick={() => handleSearch(team)}
-              className="flex w-full items-center gap-3 px-4 py-3 text-left hover:bg-c9-cyan/10 transition-colors first:rounded-t-xl last:rounded-b-xl"
+              key={team.name}
+              onClick={() => handleSearch(team.name)}
+              className="flex w-full items-center justify-between px-4 py-3 text-left hover:bg-c9-cyan/10 transition-colors first:rounded-t-xl last:rounded-b-xl"
             >
-              <div className="flex h-8 w-8 items-center justify-center rounded bg-valorant-dark text-sm font-bold text-c9-cyan">
-                {team.charAt(0)}
+              <div className="flex items-center gap-3">
+                <div className="flex h-8 w-8 items-center justify-center rounded bg-valorant-dark text-sm font-bold text-c9-cyan">
+                  #{team.rank}
+                </div>
+                <div>
+                  <span className="text-white font-medium">{team.name}</span>
+                  <span className="ml-2 text-xs text-text-muted">{team.region}</span>
+                </div>
               </div>
-              <span className="text-white">{team}</span>
+              <span className="text-xs text-text-secondary">{team.record}</span>
             </button>
           ))}
         </motion.div>
       )}
 
-      {/* Quick Select */}
+      {/* Region Filter */}
       <motion.div
-        className="mt-6"
+        className="mt-8"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        <p className="mb-3 text-center text-sm text-text-secondary">
-          Quick Select (Demo Teams)
-        </p>
-        <div className="flex flex-wrap justify-center gap-3">
-          {availableTeams.map((team, index) => (
-            <motion.button
-              key={team}
-              onClick={() => handleSearch(team)}
-              className="flex items-center gap-2 rounded-lg border border-valorant-border bg-valorant-card px-4 py-2 text-sm font-medium text-white transition-all hover:border-c9-cyan hover:shadow-glow-sm"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.3 + index * 0.1 }}
-              disabled={isLoading}
+        <div className="flex items-center justify-center gap-2 mb-4">
+          <Globe className="h-4 w-4 text-text-secondary" />
+          <p className="text-sm text-text-secondary">Select Region</p>
+          {dataSource && (
+            <span className="ml-2 text-xs px-2 py-0.5 rounded-full bg-c9-cyan/20 text-c9-cyan">
+              {dataSource === 'vlr' ? 'Live Data' : 'Cached'}
+            </span>
+          )}
+        </div>
+        <div className="flex flex-wrap justify-center gap-2 mb-6">
+          <button
+            onClick={() => setSelectedRegion('all')}
+            className={cn(
+              'px-4 py-2 rounded-lg text-sm font-medium transition-all',
+              selectedRegion === 'all'
+                ? 'bg-c9-cyan text-valorant-dark'
+                : 'border border-valorant-border text-text-secondary hover:border-c9-cyan hover:text-white'
+            )}
+          >
+            All Regions
+          </button>
+          {REGIONS.map((region) => (
+            <button
+              key={region.code}
+              onClick={() => setSelectedRegion(region.code)}
+              className={cn(
+                'px-4 py-2 rounded-lg text-sm font-medium transition-all',
+                selectedRegion === region.code
+                  ? 'bg-c9-cyan text-valorant-dark'
+                  : 'border border-valorant-border text-text-secondary hover:border-c9-cyan hover:text-white'
+              )}
             >
-              <Zap className="h-4 w-4 text-c9-cyan" />
-              {team}
-            </motion.button>
+              {region.flag} {region.name}
+            </button>
           ))}
         </div>
+      </motion.div>
+
+      {/* Teams Grid */}
+      <motion.div
+        className="mt-2"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.3 }}
+      >
+        {isLoadingTeams ? (
+          <div className="flex justify-center py-8">
+            <Loader2 className="h-8 w-8 text-c9-cyan animate-spin" />
+          </div>
+        ) : (
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {displayedTeams.map((team, index) => (
+              <motion.button
+                key={`${team.name}-${team.region}`}
+                onClick={() => handleSearch(team.name)}
+                className="group flex items-center gap-4 rounded-xl border border-valorant-border bg-valorant-card/50 p-4 text-left transition-all hover:border-c9-cyan hover:shadow-glow-sm min-w-[200px]"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.1 + index * 0.05 }}
+                disabled={isLoading}
+              >
+                <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-c9-cyan/10 text-c9-cyan font-bold group-hover:bg-c9-cyan/20">
+                  <Trophy className="h-6 w-6" />
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="font-semibold text-white text-base">{team.name}</span>
+                    <span className="text-xs px-1.5 py-0.5 rounded bg-valorant-dark text-text-muted flex-shrink-0">
+                      {team.region}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-3 mt-1">
+                    <span className="text-sm text-c9-cyan font-medium">#{team.rank}</span>
+                    <span className="text-sm text-text-muted">{team.record}</span>
+                  </div>
+                </div>
+                <ArrowRight className="h-5 w-5 flex-shrink-0 text-text-muted group-hover:text-c9-cyan transition-colors" />
+              </motion.button>
+            ))}
+          </div>
+        )}
       </motion.div>
     </div>
   );

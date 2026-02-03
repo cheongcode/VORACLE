@@ -524,17 +524,37 @@ def compute_trend_metrics(
     team_matches = matches_df[matches_df["team_name"].str.lower() == team_name.lower()].copy()
     
     if "date" in team_matches.columns:
-        team_matches = team_matches.sort_values("date", ascending=False)
+        try:
+            # Convert timezone-aware dates to naive for consistent sorting
+            team_matches["_sort_date"] = team_matches["date"].apply(
+                lambda x: x.replace(tzinfo=None) if hasattr(x, 'tzinfo') and x.tzinfo else x
+            )
+            team_matches = team_matches.sort_values("_sort_date", ascending=False)
+            team_matches = team_matches.drop(columns=["_sort_date"])
+        except Exception as e:
+            logger.warning(f"Failed to sort by date: {e}")
     
     results = {}
     
     for period, n in [("last_3", 3), ("last_10", 10)]:
         period_matches = team_matches.head(n)
-        period_match_ids = period_matches["match_id"].unique()
         
-        # Filter rounds and players to this period
-        period_rounds = rounds_df[rounds_df["match_id"].isin(period_match_ids)].copy()
-        period_players = players_df[players_df["match_id"].isin(period_match_ids)].copy()
+        # Get match IDs safely
+        if "match_id" in period_matches.columns:
+            period_match_ids = period_matches["match_id"].unique()
+        else:
+            period_match_ids = []
+        
+        # Filter rounds and players to this period (with defensive checks)
+        if not rounds_df.empty and "match_id" in rounds_df.columns and len(period_match_ids) > 0:
+            period_rounds = rounds_df[rounds_df["match_id"].isin(period_match_ids)].copy()
+        else:
+            period_rounds = rounds_df.copy() if not rounds_df.empty else pd.DataFrame()
+        
+        if not players_df.empty and "match_id" in players_df.columns and len(period_match_ids) > 0:
+            period_players = players_df[players_df["match_id"].isin(period_match_ids)].copy()
+        else:
+            period_players = players_df.copy() if not players_df.empty else pd.DataFrame()
         
         # Compute metrics for this period
         win_rate = compute_overall_win_rate(period_matches, team_name)
@@ -695,12 +715,37 @@ def compute_all_metrics(
     rounds_df = data.rounds_df
     events_df = data.events_df
     
-    # Filter to team's data
-    if not matches_df.empty:
+    logger.info(f"Computing metrics for {team_name}")
+    logger.info(f"  matches_df: {len(matches_df)} rows, columns: {list(matches_df.columns)[:5]}")
+    logger.info(f"  players_df: {len(players_df)} rows")
+    logger.info(f"  rounds_df: {len(rounds_df)} rows")
+    
+    # Filter to team's data with defensive checks
+    if not matches_df.empty and "team_name" in matches_df.columns:
         team_matches = matches_df[matches_df["team_name"].str.lower() == team_name.lower()].copy()
-        match_ids = team_matches["match_id"].unique()
-        team_rounds = rounds_df[rounds_df["match_id"].isin(match_ids)].copy() if not rounds_df.empty else pd.DataFrame()
-        team_players = players_df[players_df["is_our_team"] == True].copy() if not players_df.empty else pd.DataFrame()
+        
+        # If no matches for this team, try without team filter
+        if team_matches.empty:
+            logger.warning(f"No matches found for team '{team_name}', using all matches")
+            team_matches = matches_df.copy()
+        
+        # Get match IDs safely
+        if "match_id" in team_matches.columns and not team_matches.empty:
+            match_ids = team_matches["match_id"].unique()
+        else:
+            match_ids = []
+        
+        # Filter rounds by match_id
+        if not rounds_df.empty and "match_id" in rounds_df.columns and len(match_ids) > 0:
+            team_rounds = rounds_df[rounds_df["match_id"].isin(match_ids)].copy()
+        else:
+            team_rounds = rounds_df.copy() if not rounds_df.empty else pd.DataFrame()
+        
+        # Filter players
+        if not players_df.empty and "is_our_team" in players_df.columns:
+            team_players = players_df[players_df["is_our_team"] == True].copy()
+        else:
+            team_players = players_df.copy() if not players_df.empty else pd.DataFrame()
     else:
         team_matches = pd.DataFrame()
         team_rounds = pd.DataFrame()

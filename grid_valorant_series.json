@@ -1,0 +1,1499 @@
+{
+  "allSeries": {
+    "totalCount": 212,
+    "pageInfo": {
+      "hasNextPage": true,
+      "endCursor": "JAMWBQMjHhoSJBQfEhMCGxITCwtaCwtFT0ZOQU5PCwtaCwtFR0VCWkdPWkZHI0VGTUdHTUdHLQ=="
+    },
+    "edges": [
+      {
+        "node": {
+          "id": "2843071",
+          "startTimeScheduled": "2025-08-31T21:00:00Z",
+          "format": {
+            "name": "best-of-5"
+          },
+          "type": "ESPORTS",
+          "tournament": {
+            "id": "826992",
+            "name": "VCT Americas - Stage 2 2025 (Playoffs: Playoffs)"
+          },
+          "teams": [
+            {
+              "baseInfo": {
+                "id": "97",
+                "name": "NRG"
+              },
+              "scoreAdvantage": 0
+            },
+            {
+              "baseInfo": {
+                "id": "96",
+                "name": "G2 Esports"
+              },
+              "scoreAdvantage": 0
+            }
+          ],
+          "players": [
+            {
+              "id": "2347",
+              "nickname": "JAWGEMO"
+            },
+            {
+              "id": "1192",
+              "nickname": "leaf"
+            },
+            {
+              "id": "2351",
+              "nickname": "JonahP"
+            },
+            {
+              "id": "2353",
+              "nickname": "trent"
+            },
+            {
+              "id": "2349",
+              "nickname": "valyn"
+            },
+            {
+              "id": "709",
+              "nickname": "BABYBAY"
+            },
+            {
+              "id": "297",
+              "nickname": "Ethan"
+            },
+            {
+              "id": "2340",
+              "nickname": "s0m"
+            },
+            {
+              "id": "74432",
+              "nickname": "FNS"
+            },
+            {
+              "id": "2358",
+              "nickname": "mada"
+            },
+            {
+              "id": "2513",
+              "nickname": "brawk"
+            }
+          ]
+        }
+      },
+      {
+        "node": {
+          "id": "2843070",
+          "startTimeScheduled": "2025-08-30T21:00:00Z",
+          "format": {
+            "name": "best-of-5"
+          },
+          "type": "ESPORTS",
+          "tournament": {
+            "id": "826992",
+            "name": "VCT Americas - Stage 2 2025 (Playoffs: Playoffs)"
+          },
+          "teams": [
+            {
+              "baseInfo": {
+                "id": "97",
+                "name": "NRG"
+              },
+              "scoreAdvantage": 0
+            },
+            {
+              "baseInfo": {
+                "id": "1079",
+                "name": "Sentinels"
+              },
+              "scoreAdvantage": 0
+            }
+          ],
+          "players": [
+            {
+              "id": "297",
+              "nickname": "Ethan"
+            },
+            {
+              "id": "2340",
+              "nickname": "s0m"
+            },
+            {
+              "id": "74432",
+              "nickname": "FNS"
+            },
+            {
+              "id": "2358",
+              "nickname": "mada"
+            },
+            {
+              "id": "2513",
+              "nickname": "brawk"
+            },
+            {
+              "id": "727",
+              "nickname": "bang"
+            },
+            {
+              "id": "287",
+              "nickname": "zekken"
+            },
+            {
+              "id": "94",
+              "nickname": "Zellsis"
+            },
+            {
+              "id": "2512",
+              "nickname": "johnqt"
+            },
+            {
+              "id": "11013",
+              "nickname": "N4RRATE"
+            }
+          ]
+        }
+      },
+      {
+        "node": {
+          "id": "2843069",
+          "startTimeScheduled": "2025-08-30T00:00:00Z",
+          "format": {
+            "name": "best-of-3"
+          },
+          "type": "ESPORTS",
+          "tournament": {
+            "id": "826992",
+            "name": "VCT Americas - Stage 2 2025 (Playoffs: Playoffs)"
+          },
+          "teams": [
+            {
+              "baseInfo": {
+                "id": "79",
+                "name": "Cloud9"
+              },
+              "scoreAdvantage": 0
+            },
+            {
+              "baseInfo": {
+                "id": "97",
+                "name": "NRG"
+              },
+              "scoreAdvantage": 0
+            }
+          ],
+          "players": [
+            {
+              "id": "1193",
+              "nickname": "Xeppaa"
+            },
+            {
+              "id": "10636",
+              "nickname": "OXY"
+            },
+            {
+              "id": "2348",
+              "nickname": "neT"
+            },
+            {
+              "id": "2890",
+              "nickname": "Rossy"
+            },
+            {
+              "id": "10612",
+              "nickname": "v1c"
+            },
+            {
+              "id": "1195",
+              "nickname": "mitch"
+            },
+            {
+              "id": "272",
+              "nickname": "tuyz"
+            },
+            {
+              "id": "277",
+              "nickname": "pANcada"
+            },
+            {
+              "id": "11338",
+              "nickname": "Cauazin"
+            },
+            {
+              "id": "3301",
+              "nickname": "v1nNy"
+            },
+            {
+              "id": "1686",
+              "nickname": "RobbieBk"
+            },
+            {
+              "id": "10901",
+              "nickname": "Virtyy"
+            },
+            {
+              "id": "297",
+              "nickname": "Ethan"
+            },
+            {
+              "id": "2340",
+              "nickname": "s0m"
+            },
+            {
+              "id": "74432",
+              "nickname": "FNS"
+            },
+            {
+              "id": "2358",
+              "nickname": "mada"
+            },
+            {
+              "id": "2513",
+              "nickname": "brawk"
+            }
+          ]
+        }
+      },
+      {
+        "node": {
+          "id": "2843068",
+          "startTimeScheduled": "2025-08-29T21:00:00Z",
+          "format": {
+            "name": "best-of-3"
+          },
+          "type": "ESPORTS",
+          "tournament": {
+            "id": "826992",
+            "name": "VCT Americas - Stage 2 2025 (Playoffs: Playoffs)"
+          },
+          "teams": [
+            {
+              "baseInfo": {
+                "id": "96",
+                "name": "G2 Esports"
+              },
+              "scoreAdvantage": 0
+            },
+            {
+              "baseInfo": {
+                "id": "1079",
+                "name": "Sentinels"
+              },
+              "scoreAdvantage": 0
+            }
+          ],
+          "players": [
+            {
+              "id": "2347",
+              "nickname": "JAWGEMO"
+            },
+            {
+              "id": "1192",
+              "nickname": "leaf"
+            },
+            {
+              "id": "2351",
+              "nickname": "JonahP"
+            },
+            {
+              "id": "2353",
+              "nickname": "trent"
+            },
+            {
+              "id": "2349",
+              "nickname": "valyn"
+            },
+            {
+              "id": "709",
+              "nickname": "BABYBAY"
+            },
+            {
+              "id": "727",
+              "nickname": "bang"
+            },
+            {
+              "id": "287",
+              "nickname": "zekken"
+            },
+            {
+              "id": "94",
+              "nickname": "Zellsis"
+            },
+            {
+              "id": "2512",
+              "nickname": "johnqt"
+            },
+            {
+              "id": "11013",
+              "nickname": "N4RRATE"
+            }
+          ]
+        }
+      },
+      {
+        "node": {
+          "id": "2843066",
+          "startTimeScheduled": "2025-08-25T00:00:00Z",
+          "format": {
+            "name": "best-of-3"
+          },
+          "type": "ESPORTS",
+          "tournament": {
+            "id": "826992",
+            "name": "VCT Americas - Stage 2 2025 (Playoffs: Playoffs)"
+          },
+          "teams": [
+            {
+              "baseInfo": {
+                "id": "79",
+                "name": "Cloud9"
+              },
+              "scoreAdvantage": 0
+            },
+            {
+              "baseInfo": {
+                "id": "337",
+                "name": "100 Thieves"
+              },
+              "scoreAdvantage": 0
+            }
+          ],
+          "players": [
+            {
+              "id": "296",
+              "nickname": "Asuna"
+            },
+            {
+              "id": "2345",
+              "nickname": "Boostio"
+            },
+            {
+              "id": "2361",
+              "nickname": "Cryo"
+            },
+            {
+              "id": "2341",
+              "nickname": "eeiu"
+            },
+            {
+              "id": "2359",
+              "nickname": "Zander"
+            },
+            {
+              "id": "119048",
+              "nickname": "Kess"
+            },
+            {
+              "id": "1193",
+              "nickname": "Xeppaa"
+            },
+            {
+              "id": "10636",
+              "nickname": "OXY"
+            },
+            {
+              "id": "2348",
+              "nickname": "neT"
+            },
+            {
+              "id": "2890",
+              "nickname": "Rossy"
+            },
+            {
+              "id": "10612",
+              "nickname": "v1c"
+            },
+            {
+              "id": "1195",
+              "nickname": "mitch"
+            },
+            {
+              "id": "272",
+              "nickname": "tuyz"
+            },
+            {
+              "id": "277",
+              "nickname": "pANcada"
+            },
+            {
+              "id": "11338",
+              "nickname": "Cauazin"
+            },
+            {
+              "id": "3301",
+              "nickname": "v1nNy"
+            },
+            {
+              "id": "1686",
+              "nickname": "RobbieBk"
+            },
+            {
+              "id": "10901",
+              "nickname": "Virtyy"
+            }
+          ]
+        }
+      },
+      {
+        "node": {
+          "id": "2843067",
+          "startTimeScheduled": "2025-08-24T21:00:00Z",
+          "format": {
+            "name": "best-of-3"
+          },
+          "type": "ESPORTS",
+          "tournament": {
+            "id": "826992",
+            "name": "VCT Americas - Stage 2 2025 (Playoffs: Playoffs)"
+          },
+          "teams": [
+            {
+              "baseInfo": {
+                "id": "97",
+                "name": "NRG"
+              },
+              "scoreAdvantage": 0
+            },
+            {
+              "baseInfo": {
+                "id": "1611",
+                "name": "Leviat\u00e1n Esports"
+              },
+              "scoreAdvantage": 0
+            }
+          ],
+          "players": [
+            {
+              "id": "297",
+              "nickname": "Ethan"
+            },
+            {
+              "id": "2340",
+              "nickname": "s0m"
+            },
+            {
+              "id": "74432",
+              "nickname": "FNS"
+            },
+            {
+              "id": "2358",
+              "nickname": "mada"
+            },
+            {
+              "id": "2513",
+              "nickname": "brawk"
+            }
+          ]
+        }
+      },
+      {
+        "node": {
+          "id": "2843065",
+          "startTimeScheduled": "2025-08-24T00:00:00Z",
+          "format": {
+            "name": "best-of-3"
+          },
+          "type": "ESPORTS",
+          "tournament": {
+            "id": "826992",
+            "name": "VCT Americas - Stage 2 2025 (Playoffs: Playoffs)"
+          },
+          "teams": [
+            {
+              "baseInfo": {
+                "id": "337",
+                "name": "100 Thieves"
+              },
+              "scoreAdvantage": 0
+            },
+            {
+              "baseInfo": {
+                "id": "281",
+                "name": "Evil Geniuses"
+              },
+              "scoreAdvantage": 0
+            }
+          ],
+          "players": [
+            {
+              "id": "296",
+              "nickname": "Asuna"
+            },
+            {
+              "id": "2345",
+              "nickname": "Boostio"
+            },
+            {
+              "id": "2361",
+              "nickname": "Cryo"
+            },
+            {
+              "id": "2341",
+              "nickname": "eeiu"
+            },
+            {
+              "id": "2359",
+              "nickname": "Zander"
+            },
+            {
+              "id": "119048",
+              "nickname": "Kess"
+            },
+            {
+              "id": "866",
+              "nickname": "yay"
+            },
+            {
+              "id": "307",
+              "nickname": "supamen"
+            },
+            {
+              "id": "306",
+              "nickname": "Derrek"
+            },
+            {
+              "id": "303",
+              "nickname": "NaturE"
+            },
+            {
+              "id": "14940",
+              "nickname": "icy"
+            }
+          ]
+        }
+      },
+      {
+        "node": {
+          "id": "2843064",
+          "startTimeScheduled": "2025-08-23T21:00:00Z",
+          "format": {
+            "name": "best-of-3"
+          },
+          "type": "ESPORTS",
+          "tournament": {
+            "id": "826992",
+            "name": "VCT Americas - Stage 2 2025 (Playoffs: Playoffs)"
+          },
+          "teams": [
+            {
+              "baseInfo": {
+                "id": "1611",
+                "name": "Leviat\u00e1n Esports"
+              },
+              "scoreAdvantage": 0
+            },
+            {
+              "baseInfo": {
+                "id": "48457",
+                "name": "KR\u00dc Esports"
+              },
+              "scoreAdvantage": 0
+            }
+          ],
+          "players": [
+            {
+              "id": "208",
+              "nickname": "Melser"
+            },
+            {
+              "id": "74",
+              "nickname": "Mazino"
+            },
+            {
+              "id": "3078",
+              "nickname": "Shyy"
+            },
+            {
+              "id": "77",
+              "nickname": "keznit"
+            },
+            {
+              "id": "206",
+              "nickname": "adverso"
+            },
+            {
+              "id": "28813",
+              "nickname": "Dantedeu5"
+            }
+          ]
+        }
+      },
+      {
+        "node": {
+          "id": "2843063",
+          "startTimeScheduled": "2025-08-23T00:00:00Z",
+          "format": {
+            "name": "best-of-3"
+          },
+          "type": "ESPORTS",
+          "tournament": {
+            "id": "826992",
+            "name": "VCT Americas - Stage 2 2025 (Playoffs: Playoffs)"
+          },
+          "teams": [
+            {
+              "baseInfo": {
+                "id": "96",
+                "name": "G2 Esports"
+              },
+              "scoreAdvantage": 0
+            },
+            {
+              "baseInfo": {
+                "id": "97",
+                "name": "NRG"
+              },
+              "scoreAdvantage": 0
+            }
+          ],
+          "players": [
+            {
+              "id": "2347",
+              "nickname": "JAWGEMO"
+            },
+            {
+              "id": "1192",
+              "nickname": "leaf"
+            },
+            {
+              "id": "2351",
+              "nickname": "JonahP"
+            },
+            {
+              "id": "2353",
+              "nickname": "trent"
+            },
+            {
+              "id": "2349",
+              "nickname": "valyn"
+            },
+            {
+              "id": "709",
+              "nickname": "BABYBAY"
+            },
+            {
+              "id": "297",
+              "nickname": "Ethan"
+            },
+            {
+              "id": "2340",
+              "nickname": "s0m"
+            },
+            {
+              "id": "74432",
+              "nickname": "FNS"
+            },
+            {
+              "id": "2358",
+              "nickname": "mada"
+            },
+            {
+              "id": "2513",
+              "nickname": "brawk"
+            }
+          ]
+        }
+      },
+      {
+        "node": {
+          "id": "2843062",
+          "startTimeScheduled": "2025-08-22T21:00:00Z",
+          "format": {
+            "name": "best-of-3"
+          },
+          "type": "ESPORTS",
+          "tournament": {
+            "id": "826992",
+            "name": "VCT Americas - Stage 2 2025 (Playoffs: Playoffs)"
+          },
+          "teams": [
+            {
+              "baseInfo": {
+                "id": "79",
+                "name": "Cloud9"
+              },
+              "scoreAdvantage": 0
+            },
+            {
+              "baseInfo": {
+                "id": "1079",
+                "name": "Sentinels"
+              },
+              "scoreAdvantage": 0
+            }
+          ],
+          "players": [
+            {
+              "id": "1193",
+              "nickname": "Xeppaa"
+            },
+            {
+              "id": "10636",
+              "nickname": "OXY"
+            },
+            {
+              "id": "2348",
+              "nickname": "neT"
+            },
+            {
+              "id": "2890",
+              "nickname": "Rossy"
+            },
+            {
+              "id": "10612",
+              "nickname": "v1c"
+            },
+            {
+              "id": "1195",
+              "nickname": "mitch"
+            },
+            {
+              "id": "272",
+              "nickname": "tuyz"
+            },
+            {
+              "id": "277",
+              "nickname": "pANcada"
+            },
+            {
+              "id": "11338",
+              "nickname": "Cauazin"
+            },
+            {
+              "id": "3301",
+              "nickname": "v1nNy"
+            },
+            {
+              "id": "1686",
+              "nickname": "RobbieBk"
+            },
+            {
+              "id": "10901",
+              "nickname": "Virtyy"
+            },
+            {
+              "id": "727",
+              "nickname": "bang"
+            },
+            {
+              "id": "287",
+              "nickname": "zekken"
+            },
+            {
+              "id": "94",
+              "nickname": "Zellsis"
+            },
+            {
+              "id": "2512",
+              "nickname": "johnqt"
+            },
+            {
+              "id": "11013",
+              "nickname": "N4RRATE"
+            }
+          ]
+        }
+      },
+      {
+        "node": {
+          "id": "2843061",
+          "startTimeScheduled": "2025-08-22T00:00:00Z",
+          "format": {
+            "name": "best-of-3"
+          },
+          "type": "ESPORTS",
+          "tournament": {
+            "id": "826992",
+            "name": "VCT Americas - Stage 2 2025 (Playoffs: Playoffs)"
+          },
+          "teams": [
+            {
+              "baseInfo": {
+                "id": "96",
+                "name": "G2 Esports"
+              },
+              "scoreAdvantage": 0
+            },
+            {
+              "baseInfo": {
+                "id": "337",
+                "name": "100 Thieves"
+              },
+              "scoreAdvantage": 0
+            }
+          ],
+          "players": [
+            {
+              "id": "296",
+              "nickname": "Asuna"
+            },
+            {
+              "id": "2345",
+              "nickname": "Boostio"
+            },
+            {
+              "id": "2361",
+              "nickname": "Cryo"
+            },
+            {
+              "id": "2341",
+              "nickname": "eeiu"
+            },
+            {
+              "id": "2359",
+              "nickname": "Zander"
+            },
+            {
+              "id": "119048",
+              "nickname": "Kess"
+            },
+            {
+              "id": "2347",
+              "nickname": "JAWGEMO"
+            },
+            {
+              "id": "1192",
+              "nickname": "leaf"
+            },
+            {
+              "id": "2351",
+              "nickname": "JonahP"
+            },
+            {
+              "id": "2353",
+              "nickname": "trent"
+            },
+            {
+              "id": "2349",
+              "nickname": "valyn"
+            },
+            {
+              "id": "709",
+              "nickname": "BABYBAY"
+            }
+          ]
+        }
+      },
+      {
+        "node": {
+          "id": "2843060",
+          "startTimeScheduled": "2025-08-21T21:00:00Z",
+          "format": {
+            "name": "best-of-3"
+          },
+          "type": "ESPORTS",
+          "tournament": {
+            "id": "826992",
+            "name": "VCT Americas - Stage 2 2025 (Playoffs: Playoffs)"
+          },
+          "teams": [
+            {
+              "baseInfo": {
+                "id": "1611",
+                "name": "Leviat\u00e1n Esports"
+              },
+              "scoreAdvantage": 0
+            },
+            {
+              "baseInfo": {
+                "id": "79",
+                "name": "Cloud9"
+              },
+              "scoreAdvantage": 0
+            }
+          ],
+          "players": [
+            {
+              "id": "1193",
+              "nickname": "Xeppaa"
+            },
+            {
+              "id": "10636",
+              "nickname": "OXY"
+            },
+            {
+              "id": "2348",
+              "nickname": "neT"
+            },
+            {
+              "id": "2890",
+              "nickname": "Rossy"
+            },
+            {
+              "id": "10612",
+              "nickname": "v1c"
+            },
+            {
+              "id": "1195",
+              "nickname": "mitch"
+            },
+            {
+              "id": "272",
+              "nickname": "tuyz"
+            },
+            {
+              "id": "277",
+              "nickname": "pANcada"
+            },
+            {
+              "id": "11338",
+              "nickname": "Cauazin"
+            },
+            {
+              "id": "3301",
+              "nickname": "v1nNy"
+            },
+            {
+              "id": "1686",
+              "nickname": "RobbieBk"
+            },
+            {
+              "id": "10901",
+              "nickname": "Virtyy"
+            }
+          ]
+        }
+      },
+      {
+        "node": {
+          "id": "2819705",
+          "startTimeScheduled": "2025-08-18T00:00:00Z",
+          "format": {
+            "name": "best-of-3"
+          },
+          "type": "ESPORTS",
+          "tournament": {
+            "id": "826663",
+            "name": "VCT Americas - Stage 2 2025 (Regular Season: Group B)"
+          },
+          "teams": [
+            {
+              "baseInfo": {
+                "id": "81",
+                "name": "MIBR (1)"
+              },
+              "scoreAdvantage": 0
+            },
+            {
+              "baseInfo": {
+                "id": "3412",
+                "name": "LOUD (1)"
+              },
+              "scoreAdvantage": 0
+            }
+          ],
+          "players": [
+            {
+              "id": "14",
+              "nickname": "aspas"
+            },
+            {
+              "id": "2837",
+              "nickname": "artziN"
+            },
+            {
+              "id": "32038",
+              "nickname": "Palla"
+            },
+            {
+              "id": "10630",
+              "nickname": "Verno"
+            },
+            {
+              "id": "629",
+              "nickname": "xenom"
+            },
+            {
+              "id": "3320",
+              "nickname": "cortezia"
+            }
+          ]
+        }
+      },
+      {
+        "node": {
+          "id": "2819704",
+          "startTimeScheduled": "2025-08-17T21:00:00Z",
+          "format": {
+            "name": "best-of-3"
+          },
+          "type": "ESPORTS",
+          "tournament": {
+            "id": "826662",
+            "name": "VCT Americas - Stage 2 2025 (Regular Season: Group A)"
+          },
+          "teams": [
+            {
+              "baseInfo": {
+                "id": "96",
+                "name": "G2 Esports"
+              },
+              "scoreAdvantage": 0
+            },
+            {
+              "baseInfo": {
+                "id": "79",
+                "name": "Cloud9"
+              },
+              "scoreAdvantage": 0
+            }
+          ],
+          "players": [
+            {
+              "id": "1193",
+              "nickname": "Xeppaa"
+            },
+            {
+              "id": "10636",
+              "nickname": "OXY"
+            },
+            {
+              "id": "2348",
+              "nickname": "neT"
+            },
+            {
+              "id": "2890",
+              "nickname": "Rossy"
+            },
+            {
+              "id": "10612",
+              "nickname": "v1c"
+            },
+            {
+              "id": "1195",
+              "nickname": "mitch"
+            },
+            {
+              "id": "2347",
+              "nickname": "JAWGEMO"
+            },
+            {
+              "id": "1192",
+              "nickname": "leaf"
+            },
+            {
+              "id": "2351",
+              "nickname": "JonahP"
+            },
+            {
+              "id": "2353",
+              "nickname": "trent"
+            },
+            {
+              "id": "2349",
+              "nickname": "valyn"
+            },
+            {
+              "id": "709",
+              "nickname": "BABYBAY"
+            },
+            {
+              "id": "272",
+              "nickname": "tuyz"
+            },
+            {
+              "id": "277",
+              "nickname": "pANcada"
+            },
+            {
+              "id": "11338",
+              "nickname": "Cauazin"
+            },
+            {
+              "id": "3301",
+              "nickname": "v1nNy"
+            },
+            {
+              "id": "1686",
+              "nickname": "RobbieBk"
+            },
+            {
+              "id": "10901",
+              "nickname": "Virtyy"
+            }
+          ]
+        }
+      },
+      {
+        "node": {
+          "id": "2819703",
+          "startTimeScheduled": "2025-08-17T00:00:00Z",
+          "format": {
+            "name": "best-of-3"
+          },
+          "type": "ESPORTS",
+          "tournament": {
+            "id": "826662",
+            "name": "VCT Americas - Stage 2 2025 (Regular Season: Group A)"
+          },
+          "teams": [
+            {
+              "baseInfo": {
+                "id": "53367",
+                "name": "2GAME eSports"
+              },
+              "scoreAdvantage": 0
+            },
+            {
+              "baseInfo": {
+                "id": "1079",
+                "name": "Sentinels"
+              },
+              "scoreAdvantage": 0
+            }
+          ],
+          "players": [
+            {
+              "id": "727",
+              "nickname": "bang"
+            },
+            {
+              "id": "287",
+              "nickname": "zekken"
+            },
+            {
+              "id": "94",
+              "nickname": "Zellsis"
+            },
+            {
+              "id": "2512",
+              "nickname": "johnqt"
+            },
+            {
+              "id": "11013",
+              "nickname": "N4RRATE"
+            }
+          ]
+        }
+      },
+      {
+        "node": {
+          "id": "2819702",
+          "startTimeScheduled": "2025-08-16T21:00:00Z",
+          "format": {
+            "name": "best-of-3"
+          },
+          "type": "ESPORTS",
+          "tournament": {
+            "id": "826662",
+            "name": "VCT Americas - Stage 2 2025 (Regular Season: Group A)"
+          },
+          "teams": [
+            {
+              "baseInfo": {
+                "id": "99",
+                "name": "FURIA"
+              },
+              "scoreAdvantage": 0
+            },
+            {
+              "baseInfo": {
+                "id": "281",
+                "name": "Evil Geniuses"
+              },
+              "scoreAdvantage": 0
+            }
+          ],
+          "players": [
+            {
+              "id": "866",
+              "nickname": "yay"
+            },
+            {
+              "id": "307",
+              "nickname": "supamen"
+            },
+            {
+              "id": "306",
+              "nickname": "Derrek"
+            },
+            {
+              "id": "303",
+              "nickname": "NaturE"
+            },
+            {
+              "id": "14940",
+              "nickname": "icy"
+            },
+            {
+              "id": "48",
+              "nickname": "Heat"
+            },
+            {
+              "id": "32030",
+              "nickname": "pryze"
+            },
+            {
+              "id": "42",
+              "nickname": "Urango"
+            },
+            {
+              "id": "42759",
+              "nickname": "Basic"
+            }
+          ]
+        }
+      },
+      {
+        "node": {
+          "id": "2819701",
+          "startTimeScheduled": "2025-08-16T00:00:00Z",
+          "format": {
+            "name": "best-of-3"
+          },
+          "type": "ESPORTS",
+          "tournament": {
+            "id": "826663",
+            "name": "VCT Americas - Stage 2 2025 (Regular Season: Group B)"
+          },
+          "teams": [
+            {
+              "baseInfo": {
+                "id": "337",
+                "name": "100 Thieves"
+              },
+              "scoreAdvantage": 0
+            },
+            {
+              "baseInfo": {
+                "id": "1611",
+                "name": "Leviat\u00e1n Esports"
+              },
+              "scoreAdvantage": 0
+            }
+          ],
+          "players": [
+            {
+              "id": "296",
+              "nickname": "Asuna"
+            },
+            {
+              "id": "2345",
+              "nickname": "Boostio"
+            },
+            {
+              "id": "2361",
+              "nickname": "Cryo"
+            },
+            {
+              "id": "2341",
+              "nickname": "eeiu"
+            },
+            {
+              "id": "2359",
+              "nickname": "Zander"
+            },
+            {
+              "id": "119048",
+              "nickname": "Kess"
+            }
+          ]
+        }
+      },
+      {
+        "node": {
+          "id": "2819700",
+          "startTimeScheduled": "2025-08-15T21:00:00Z",
+          "format": {
+            "name": "best-of-3"
+          },
+          "type": "ESPORTS",
+          "tournament": {
+            "id": "826663",
+            "name": "VCT Americas - Stage 2 2025 (Regular Season: Group B)"
+          },
+          "teams": [
+            {
+              "baseInfo": {
+                "id": "48457",
+                "name": "KR\u00dc Esports"
+              },
+              "scoreAdvantage": 0
+            },
+            {
+              "baseInfo": {
+                "id": "97",
+                "name": "NRG"
+              },
+              "scoreAdvantage": 0
+            }
+          ],
+          "players": [
+            {
+              "id": "208",
+              "nickname": "Melser"
+            },
+            {
+              "id": "74",
+              "nickname": "Mazino"
+            },
+            {
+              "id": "3078",
+              "nickname": "Shyy"
+            },
+            {
+              "id": "77",
+              "nickname": "keznit"
+            },
+            {
+              "id": "206",
+              "nickname": "adverso"
+            },
+            {
+              "id": "28813",
+              "nickname": "Dantedeu5"
+            },
+            {
+              "id": "297",
+              "nickname": "Ethan"
+            },
+            {
+              "id": "2340",
+              "nickname": "s0m"
+            },
+            {
+              "id": "74432",
+              "nickname": "FNS"
+            },
+            {
+              "id": "2358",
+              "nickname": "mada"
+            },
+            {
+              "id": "2513",
+              "nickname": "brawk"
+            }
+          ]
+        }
+      },
+      {
+        "node": {
+          "id": "2819699",
+          "startTimeScheduled": "2025-08-11T00:00:00Z",
+          "format": {
+            "name": "best-of-3"
+          },
+          "type": "ESPORTS",
+          "tournament": {
+            "id": "826663",
+            "name": "VCT Americas - Stage 2 2025 (Regular Season: Group B)"
+          },
+          "teams": [
+            {
+              "baseInfo": {
+                "id": "3412",
+                "name": "LOUD (1)"
+              },
+              "scoreAdvantage": 0
+            },
+            {
+              "baseInfo": {
+                "id": "337",
+                "name": "100 Thieves"
+              },
+              "scoreAdvantage": 0
+            }
+          ],
+          "players": [
+            {
+              "id": "296",
+              "nickname": "Asuna"
+            },
+            {
+              "id": "2345",
+              "nickname": "Boostio"
+            },
+            {
+              "id": "2361",
+              "nickname": "Cryo"
+            },
+            {
+              "id": "2341",
+              "nickname": "eeiu"
+            },
+            {
+              "id": "2359",
+              "nickname": "Zander"
+            },
+            {
+              "id": "119048",
+              "nickname": "Kess"
+            }
+          ]
+        }
+      },
+      {
+        "node": {
+          "id": "2819698",
+          "startTimeScheduled": "2025-08-10T21:00:00Z",
+          "format": {
+            "name": "best-of-3"
+          },
+          "type": "ESPORTS",
+          "tournament": {
+            "id": "826662",
+            "name": "VCT Americas - Stage 2 2025 (Regular Season: Group A)"
+          },
+          "teams": [
+            {
+              "baseInfo": {
+                "id": "99",
+                "name": "FURIA"
+              },
+              "scoreAdvantage": 0
+            },
+            {
+              "baseInfo": {
+                "id": "96",
+                "name": "G2 Esports"
+              },
+              "scoreAdvantage": 0
+            }
+          ],
+          "players": [
+            {
+              "id": "48",
+              "nickname": "Heat"
+            },
+            {
+              "id": "32030",
+              "nickname": "pryze"
+            },
+            {
+              "id": "42",
+              "nickname": "Urango"
+            },
+            {
+              "id": "42759",
+              "nickname": "Basic"
+            },
+            {
+              "id": "2347",
+              "nickname": "JAWGEMO"
+            },
+            {
+              "id": "1192",
+              "nickname": "leaf"
+            },
+            {
+              "id": "2351",
+              "nickname": "JonahP"
+            },
+            {
+              "id": "2353",
+              "nickname": "trent"
+            },
+            {
+              "id": "2349",
+              "nickname": "valyn"
+            },
+            {
+              "id": "709",
+              "nickname": "BABYBAY"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

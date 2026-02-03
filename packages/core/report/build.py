@@ -2,7 +2,7 @@
 Report Builder
 
 Orchestrates the full scouting report generation pipeline:
-GRID API → Normalize → Metrics → Insights → Report
+GRID + VLR APIs → Normalize → Metrics → Insights → Report
 """
 from __future__ import annotations
 
@@ -11,7 +11,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Optional
 
-from ..grid.client import GRIDClient, GRIDClientError
+from ..data.combined import fetch_combined_data, combined_to_dataframes
 from ..grid.mock_data import get_mock_matches
 from ..insights.generator import (
     generate_insights,
@@ -23,7 +23,7 @@ from ..insights.generator import (
 )
 from ..insights.rules import InsightResult
 from ..metrics.valorant import AllMetrics, compute_all_metrics, compute_trend_shift
-from ..normalize.valorant import NormalizedData, normalize_mock_data, normalize_all, normalize_match_list, normalize_match_detail
+from ..normalize.valorant import NormalizedData, normalize_mock_data
 from .models import (
     AgentStats,
     DataFrameInfo,
@@ -51,12 +51,19 @@ def _build_team_summary(metrics: AllMetrics, data: NormalizedData) -> TeamSummar
     # Get date range
     date_range = "N/A"
     if not matches_df.empty and "date" in matches_df.columns:
-        dates = matches_df["date"].dropna()
-        if len(dates) > 0:
-            min_date = dates.min()
-            max_date = dates.max()
-            if hasattr(min_date, "strftime"):
-                date_range = f"{min_date.strftime('%Y-%m-%d')} to {max_date.strftime('%Y-%m-%d')}"
+        try:
+            dates = matches_df["date"].dropna()
+            if len(dates) > 0:
+                # Normalize timezones for comparison
+                normalized_dates = dates.apply(
+                    lambda x: x.replace(tzinfo=None) if hasattr(x, 'tzinfo') and x.tzinfo else x
+                )
+                min_date = normalized_dates.min()
+                max_date = normalized_dates.max()
+                if hasattr(min_date, "strftime"):
+                    date_range = f"{min_date.strftime('%Y-%m-%d')} to {max_date.strftime('%Y-%m-%d')}"
+        except Exception as e:
+            logger.warning(f"Failed to compute date range: {e}")
     
     return TeamSummary(
         name=metrics.team_name,
@@ -163,11 +170,22 @@ def _build_economy_stats(metrics: AllMetrics) -> EconomyStats:
 def _build_player_stats(metrics: AllMetrics, data: NormalizedData) -> list[PlayerStats]:
     """Build player statistics."""
     players_df = data.players_df
-    team_players = players_df[players_df["is_our_team"] == True] if not players_df.empty else players_df
+    
+    if players_df.empty:
+        return []
+    
+    # Filter to our team's players
+    if "is_our_team" in players_df.columns:
+        team_players = players_df[players_df["is_our_team"] == True]
+    else:
+        team_players = players_df
+    
+    if team_players.empty:
+        return []
     
     player_stats = []
     
-    for player_name in team_players["player_name"].unique() if not team_players.empty else []:
+    for player_name in team_players["player_name"].unique():
         player_data = team_players[team_players["player_name"] == player_name]
         
         if player_data.empty:
@@ -191,19 +209,40 @@ def _build_player_stats(metrics: AllMetrics, data: NormalizedData) -> list[Playe
             ]
             agent_pool.sort(key=lambda x: x.games, reverse=True)
         else:
-            most_played_agent = player_data["agent"].mode().iloc[0] if not player_data.empty else "Unknown"
+            # Check for agent column
+            if "agent" in player_data.columns and not player_data["agent"].empty:
+                mode = player_data["agent"].mode()
+                most_played_agent = mode.iloc[0] if len(mode) > 0 else "Various"
+            else:
+                most_played_agent = "Various"
             agent_pool = []
         
-        # Calculate averages
-        avg_acs = player_data["acs"].mean() if "acs" in player_data.columns else 0.0
+        # Calculate averages - handle VLR data which has different column names
+        avg_acs = 0.0
+        if "acs" in player_data.columns:
+            acs_values = player_data["acs"].dropna()
+            if len(acs_values) > 0:
+                avg_acs = float(acs_values.mean())
+        
         avg_kills = player_data["kills"].mean() if "kills" in player_data.columns else 0.0
         avg_deaths = player_data["deaths"].mean() if "deaths" in player_data.columns else 0.0
         avg_assists = player_data["assists"].mean() if "assists" in player_data.columns else 0.0
         
-        # K/D ratio
-        total_kills = player_data["kills"].sum() if "kills" in player_data.columns else 0
-        total_deaths = player_data["deaths"].sum() if "deaths" in player_data.columns else 0
-        kd_ratio = total_kills / max(1, total_deaths)
+        # K/D ratio - prefer pre-computed from VLR, otherwise calculate
+        if "kd" in player_data.columns:
+            kd_values = player_data["kd"].dropna()
+            kd_ratio = float(kd_values.mean()) if len(kd_values) > 0 else 0.0
+        else:
+            total_kills = player_data["kills"].sum() if "kills" in player_data.columns else 0
+            total_deaths = player_data["deaths"].sum() if "deaths" in player_data.columns else 0
+            kd_ratio = total_kills / max(1, total_deaths)
+        
+        # Rating from VLR if available
+        rating = 0.0
+        if "rating" in player_data.columns:
+            rating_values = player_data["rating"].dropna()
+            if len(rating_values) > 0:
+                rating = float(rating_values.mean())
         
         # First blood rates
         fb_metric = metrics.player_first_blood_rates.get(player_name)
@@ -310,77 +349,56 @@ def _build_evidence_tables(data: NormalizedData, max_rows: int = 10) -> dict[str
     return tables
 
 
-def _load_query(name: str) -> str:
-    """Load a GraphQL query from file."""
-    query_path = Path(__file__).parent.parent / "grid" / "queries" / "valorant" / f"{name}.graphql"
-    if query_path.exists():
-        return query_path.read_text()
-    raise FileNotFoundError(f"Query file not found: {query_path}")
-
-
-async def _fetch_grid_data(
+async def _fetch_live_data(
     team_name: str,
     n_matches: int,
-) -> NormalizedData:
+) -> tuple[NormalizedData, str, dict]:
     """
-    Fetch data from GRID API and normalize it.
+    Fetch live data from GRID and VLR APIs.
     
-    The GRID API requires:
-    1. First get team ID by name
-    2. Then query series by team ID
+    Combines data from multiple sources for best coverage.
+    
+    Returns:
+        Tuple of (NormalizedData, data_quality, team_info)
     """
-    logger.info(f"Fetching GRID data for {team_name}")
+    logger.info(f"Fetching live data for {team_name} from GRID + VLR")
     
-    async with GRIDClient() as client:
-        # Step 1: Get team by name
-        team_query = _load_query("match_list")  # This query gets teams by name
-        team_result = await client.query(
-            "get_team",
-            team_query,
-            {"teamName": team_name, "first": 5},
-        )
-        
-        # Extract team ID
-        teams_edges = team_result.get("teams", {}).get("edges", [])
-        if not teams_edges:
-            logger.warning(f"No team found with name: {team_name}")
-            raise ValueError(f"No team found: {team_name}")
-        
-        # Find best matching team
-        team_node = None
-        for edge in teams_edges:
-            node = edge.get("node", {})
-            if node.get("name", "").lower() == team_name.lower():
-                team_node = node
-                break
-        
-        if not team_node:
-            team_node = teams_edges[0].get("node", {})
-        
-        team_id = team_node.get("id")
-        actual_team_name = team_node.get("name", team_name)
-        logger.info(f"Found team: {actual_team_name} (ID: {team_id})")
-        
-        # Step 2: Get series for team
-        series_query = _load_query("series_list")
-        series_result = await client.query(
-            "get_series",
-            series_query,
-            {"teamId": team_id, "first": n_matches * 3},  # Get more series to ensure enough matches
-        )
-        
-        # For now, since the detailed match data structure may vary,
-        # we'll create a simplified normalized dataset from series data
-        logger.info(f"Processing series data for {actual_team_name}")
-        
-        # TODO: Implement full series -> match -> round data extraction
-        # For now, fall back to mock data with a note about the source
-        logger.warning("Full GRID match detail extraction not yet implemented")
-        raise ValueError("GRID match details not available - using mock data")
-        
-        # Placeholder for future implementation
-        # data = _normalize_grid_series(series_result, actual_team_name)
-        # return data
+    # Fetch combined data from all sources
+    combined_data = await fetch_combined_data(team_name, n_matches)
+    
+    # Convert to DataFrames
+    dfs = combined_to_dataframes(combined_data)
+    
+    # Create NormalizedData object
+    import pandas as pd
+    
+    data = NormalizedData(
+        matches_df=dfs.get("matches_df", pd.DataFrame()),
+        players_df=dfs.get("players_df", pd.DataFrame()),
+        rounds_df=dfs.get("rounds_df", pd.DataFrame()),
+        events_df=None,
+        economy_df=None,
+        picks_df=None,
+    )
+    
+    # Build team info
+    team_info = {
+        "id": combined_data.team_id,
+        "name": combined_data.team_name,
+        "rank": combined_data.rank,
+        "record": combined_data.record,
+        "earnings": combined_data.earnings,
+        "logo_url": combined_data.logo_url,
+        "wins_from_record": combined_data.wins_from_record,
+        "losses_from_record": combined_data.losses_from_record,
+        "win_rate_from_record": combined_data.win_rate_from_record,
+    }
+    
+    # Add team metadata to data object
+    data.team_info = team_info
+    
+    logger.info(f"Live data: {len(data.matches_df)} matches, {len(data.players_df)} players, quality: {combined_data.data_quality}")
+    return data, combined_data.data_quality, team_info
 
 
 async def build_report(
@@ -392,24 +410,60 @@ async def build_report(
     Build a complete scouting report for a team.
     
     This is the main entry point for report generation.
+    
+    Args:
+        team_name: Name of the team to analyze
+        n_matches: Number of matches to analyze
+        use_mock: If True, use mock data. If False, fetch from GRID + VLR APIs.
     """
     logger.info(f"Building report for {team_name} with {n_matches} matches (mock={use_mock})")
+    
+    data_source = "mock"
+    data_quality = "good"
+    team_info = None
     
     # Step 1: Fetch data
     if use_mock:
         raw_matches = get_mock_matches(team_name, n_matches)
         data = normalize_mock_data(raw_matches, team_name)
     else:
-        # Fetch from GRID API
+        # Fetch live data from GRID + VLR
         try:
-            data = await _fetch_grid_data(team_name, n_matches)
-        except (GRIDClientError, ValueError) as e:
-            logger.warning(f"GRID API fetch failed: {e}. Falling back to mock data.")
+            data, data_quality, team_info = await _fetch_live_data(team_name, n_matches)
+            data_source = "live"
+            
+            # Check data quality and potentially fallback to mock
+            if data_quality in ["no_data"]:
+                logger.warning(f"Live data quality too low ({data_quality}). Falling back to mock data.")
+                raw_matches = get_mock_matches(team_name, n_matches)
+                data = normalize_mock_data(raw_matches, team_name)
+                data_source = "mock_fallback"
+                # Preserve team info from live data
+                if team_info:
+                    data.team_info = team_info
+                    
+        except Exception as e:
+            logger.warning(f"Live data fetch failed: {e}. Falling back to mock data.")
             raw_matches = get_mock_matches(team_name, n_matches)
             data = normalize_mock_data(raw_matches, team_name)
+            data_source = "mock_fallback"
     
     # Step 2: Compute metrics
     metrics = compute_all_metrics(data, team_name)
+    
+    # Step 2.5: Override win rate from VLR rankings if we have it and match data was poor
+    if team_info and team_info.get("win_rate_from_record") is not None:
+        if data_quality in ["rankings_only", "no_data", "partial"]:
+            # Use the win rate from VLR rankings
+            vlr_win_rate = team_info["win_rate_from_record"]
+            logger.info(f"Using VLR rankings win rate: {vlr_win_rate:.1%} (quality: {data_quality})")
+            # Update metrics with VLR ranking data
+            metrics.overall_win_rate.value = vlr_win_rate
+            metrics.overall_win_rate.numerator = team_info.get("wins_from_record", 0)
+            metrics.overall_win_rate.denominator = (
+                team_info.get("wins_from_record", 0) + team_info.get("losses_from_record", 0)
+            )
+            metrics.matches_analyzed = metrics.overall_win_rate.denominator
     
     # Step 3: Generate insights
     insights = generate_insights(metrics, data)
@@ -417,9 +471,15 @@ async def build_report(
     what_not_to_do = generate_what_not_to_do(insights)
     
     # Step 4: Build report
+    team_summary = _build_team_summary(metrics, data)
+    
+    # Override team name if we have better info from VLR
+    if team_info and team_info.get("name"):
+        team_summary.name = team_info["name"]
+    
     report = ScoutingReport(
         generated_at=datetime.now(),
-        team_summary=_build_team_summary(metrics, data),
+        team_summary=team_summary,
         trend_alerts=_build_trend_alerts(metrics),
         map_veto=_build_map_veto(metrics, insights),
         map_performance=_build_map_stats(metrics),
@@ -432,14 +492,16 @@ async def build_report(
         what_not_to_do=what_not_to_do,
         evidence_tables=_build_evidence_tables(data),
         meta={
-            "data_source": "mock" if use_mock else "grid",
+            "data_source": data_source,
+            "data_quality": data_quality,
             "matches_requested": n_matches,
             "matches_found": len(data.matches_df),
             "insight_summary": compute_insight_summary(insights),
+            "team_info": team_info or getattr(data, "team_info", None),
         },
     )
     
-    logger.info(f"Report built: {len(insights)} insights, {len(how_to_beat)} recommendations")
+    logger.info(f"Report built: {len(insights)} insights, {len(how_to_beat)} recommendations, quality: {data_quality}")
     return report
 
 
